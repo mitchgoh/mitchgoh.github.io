@@ -33,9 +33,54 @@
     <br><br>
     <button onclick="runPython()">Run Code</button>
     <div id="output"></div>
-
+    <script>
+        async function checkAvailableRuntimes() {
+            let response = await fetch('https://emkc.org/api/v2/piston/runtimes');
+            let runtimes = await response.json();
+            console.log('Available runtimes:', runtimes);
+        }
+    
+        async function runPython() {
+            // Check available runtimes (optional)
+            // Uncomment the following line to log available runtimes
+            // await checkAvailableRuntimes(); 
+    
+            // Get the user's Python code from the textarea
+            let code = document.getElementById('codeArea').value;
+    
+            // Call Piston API to execute the code
+            let response = await fetch('https://emkc.org/api/v2/piston/execute', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    language: 'python',
+                    version: '3.8',  // Change this to a version you know works
+                    files: [{
+                        name: 'code.py',
+                        content: code
+                    }]
+                })
+            });
+    
+            // Parse the API response
+            let result = await response.json();
+            console.log(result);  // Log the entire response for debugging
+    
+            // Display the output in the output div
+            if (result.output) {
+                document.getElementById('output').innerText = result.output;
+            } else if (result.message) {
+                document.getElementById('output').innerText = result.message;
+            } else {
+                document.getElementById('output').innerText = 'No output received!';
+            }
+        }
+    </script>
     <script>
         async function runPython() {
+            
             // Get the user's Python code from the textarea
             let code = document.getElementById('codeArea').value;
 
