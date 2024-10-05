@@ -1,7 +1,17 @@
-<!DOCTYPE html>
 <html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-</body>
+  <head>
+    <script src="https://unpkg.com/monaco-editor@0.33.0/min/vs/loader.js"></script>
+  </head>
+  <body>
+    <div id="container" style="height:500px;"></div>
+    <script>
+      require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@0.33.0/min/vs' }});
+      require(['vs/editor/editor.main'], function() {
+        monaco.editor.create(document.getElementById('container'), {
+          value: 'print("Hello, world!")',
+          language: 'python'
+        });
+      });
+    </script>
+  </body>
 </html>
